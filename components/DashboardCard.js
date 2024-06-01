@@ -13,7 +13,7 @@ export default function DashboardCard(props) {
             {props.title}
           </Typography>
         </Box>
-        <Typography variant="h4" sx={{ mb: 1.5 }} color="text.secondary">
+        <Typography variant="h5" sx={{ mb: 1.5 }} color="text.secondary">
           {props.description}
         </Typography>
         <Typography variant="body2">{props.subDescription}</Typography>
@@ -21,7 +21,7 @@ export default function DashboardCard(props) {
     </Fragment>
   );
   return (
-    <Box style={{ width: 960 / 3 }}>
+    <Box>
       <Card variant="outlined">{card}</Card>
     </Box>
   );

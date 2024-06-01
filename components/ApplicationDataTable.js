@@ -6,7 +6,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-export default function ApplicationDataTable(props) {
+export default function ApplicationDataTable({ data }) {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -20,18 +20,15 @@ export default function ApplicationDataTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.company}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
+          {data.map((row, index) => (
+            <TableRow key={index}>
               <TableCell component="th" scope="row">
                 {row.company}
               </TableCell>
               <TableCell align="right">{row.position}</TableCell>
               <TableCell align="right">{row.applied}</TableCell>
               <TableCell align="right">{row.response}</TableCell>
-              <TableCell align="right">{row.interview}</TableCell>
+              <TableCell align="right">{row.interview}</TableCell>{" "}
             </TableRow>
           ))}
         </TableBody>
@@ -40,7 +37,7 @@ export default function ApplicationDataTable(props) {
   );
 }
 
-const rows = [
+const data = [
   {
     id: 14,
     company: "Dans Super Company",

@@ -2,7 +2,6 @@ import "@fontsource/roboto/300.css";
 import NavBar from "@/components/NavBar";
 import DashboardCard from "@/components/DashboardCard";
 import { Container, Box, Grid } from "@mui/material";
-import PsychologyAltIcon from "@mui/icons-material/PsychologyAlt";
 import ApplicationDataTable from "@/components/ApplicationDataTable";
 import { dashboardData } from "@/dashboard-data";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
@@ -25,7 +24,7 @@ export default function Home() {
             <NavBar />
           </Grid>
           <Grid item xs={12}>
-            <Container sx={{ width: 960 }}>
+            <Container sx={{ width: 960 }} style={{ padding: 0 }}>
               <Grid container spacing={2}>
                 {cardsData.map((card, index) => (
                   <Grid item xs={12} sm={4} key={index}>
@@ -37,6 +36,12 @@ export default function Home() {
                     />
                   </Grid>
                 ))}
+              </Grid>
+
+              <Grid item xs={12} style={{ marginTop: "2rem" }}>
+                <ApplicationDataTable
+                  data={dashboardData.job_application_data}
+                />
               </Grid>
             </Container>
           </Grid>

@@ -15,6 +15,12 @@ export default function Home() {
     { title: "Responses", data: responses, icon: <MailOutlineIcon /> },
     { title: "Interviews", data: interviews, icon: <PeopleOutlineIcon /> },
   ];
+  const chart1Data = [
+    { id: 0, value: applications.total, label: "Applications" },
+    { id: 1, value: responses.total, label: "Responses" },
+    { id: 2, value: interviews.total, label: "Interviews" },
+  ];
+  const chart2Data = [];
 
   return (
     <>
@@ -39,9 +45,11 @@ export default function Home() {
               </Grid>
 
               <Grid item xs={12} style={{ marginTop: "2rem" }}>
-                <ApplicationDataTable
-                  data={dashboardData.job_application_data}
-                />
+                {/* <PieDataChart /> */}
+              </Grid>
+
+              <Grid item xs={12} style={{ marginTop: "2rem" }}>
+                <ApplicationDataTable data={dashboardData} />
               </Grid>
             </Container>
           </Grid>

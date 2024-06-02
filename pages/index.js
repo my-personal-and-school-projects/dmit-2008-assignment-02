@@ -7,20 +7,46 @@ import { dashboardData } from "@/dashboard-data";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
+import PieDataChart from "@/components/PieDataChart";
 
 export default function Home() {
   const { applications, responses, interviews } = dashboardData;
+
+  //Apps info for the cards
   const cardsData = [
     { title: "Applications", data: applications, icon: <WorkOutlineIcon /> },
     { title: "Responses", data: responses, icon: <MailOutlineIcon /> },
     { title: "Interviews", data: interviews, icon: <PeopleOutlineIcon /> },
   ];
+
+  /**
+   * The function filters the information based on a given parameter
+   * @param {*} appStatus
+   * @returns The status of the applications
+   */
+  function getAppStatus(appStatus) {
+    return dashboardData.job_application_data.filter(
+      (app) => app.response.toLowerCase() === appStatus
+    );
+  }
+
+  const respondedApps = getAppStatus("responded");
+  const rejectedApps = getAppStatus("rejected");
+  const pendingApps = getAppStatus("pending");
+
+  //App info for the first chart
   const chart1Data = [
     { id: 0, value: applications.total, label: "Applications" },
     { id: 1, value: responses.total, label: "Responses" },
     { id: 2, value: interviews.total, label: "Interviews" },
   ];
-  const chart2Data = [];
+
+  //App status for the second chart
+  const chart2Data = [
+    { id: 0, value: respondedApps.length, label: "Responded" },
+    { id: 1, value: rejectedApps.length, label: "Rejected" },
+    { id: 2, value: pendingApps.length, label: "Pending" },
+  ];
 
   return (
     <>
@@ -44,12 +70,24 @@ export default function Home() {
                 ))}
               </Grid>
 
-              <Grid item xs={12} style={{ marginTop: "2rem" }}>
-                {/* <PieDataChart /> */}
+              <Grid
+                item
+                xs={12}
+                style={{
+                  display: "flex",
+                  gap: "2rem",
+                  padding: 0,
+                  marginTop: "2rem",
+                }}
+              >
+                <PieDataChart data={chart1Data} />
+                <PieDataChart data={chart2Data} />
               </Grid>
 
               <Grid item xs={12} style={{ marginTop: "2rem" }}>
-                <ApplicationDataTable data={dashboardData} />
+                <ApplicationDataTable
+                  data={dashboardData.job_application_data}
+                />
               </Grid>
             </Container>
           </Grid>

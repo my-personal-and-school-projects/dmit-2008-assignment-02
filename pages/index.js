@@ -1,13 +1,14 @@
 import "@fontsource/roboto/300.css";
 import NavBar from "@/components/NavBar";
 import DashboardCard from "@/components/DashboardCard";
-import { Container, Box, Grid } from "@mui/material";
+import { Container, Box, Grid, Typography } from "@mui/material";
 import ApplicationDataTable from "@/components/ApplicationDataTable";
 import { dashboardData } from "@/dashboard-data";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 import PieDataChart from "@/components/PieDataChart";
+import LineDataChart from "@/components/LineDataChart";
 
 export default function Home() {
   const { applications, responses, interviews } = dashboardData;
@@ -34,19 +35,54 @@ export default function Home() {
   const rejectedApps = getAppStatus("rejected");
   const pendingApps = getAppStatus("pending");
 
-  //App info for the first chart
+  //App info for the first pie chart
   const chart1Data = [
     { id: 0, value: applications.total, label: "Applications" },
     { id: 1, value: responses.total, label: "Responses" },
     { id: 2, value: interviews.total, label: "Interviews" },
   ];
 
-  //App status for the second chart
+  //App status for the second pie chart
   const chart2Data = [
     { id: 0, value: respondedApps.length, label: "Responded" },
     { id: 1, value: rejectedApps.length, label: "Rejected" },
     { id: 2, value: pendingApps.length, label: "Pending" },
   ];
+
+  /**
+   * This function creates an array of the number of apps by the "applied" date
+   * according to its status
+   * @param {*} appStatus
+   * @returns the count of apps filtered by the "applied" date according to its status
+   */
+  function getAppDatesByStatus(appStatus) {
+    const appDates = {};
+    appStatus.forEach((app) => {
+      const date = app.applied;
+
+      if (appDates[date]) {
+        appDates[date] += 1;
+      } else {
+        appDates[date] = 1;
+      }
+    });
+
+    return appDates;
+  }
+
+  const pendingAppsCount = getAppDatesByStatus(pendingApps);
+  const respondedAppsCount = getAppDatesByStatus(respondedApps);
+  const rejectedAppsCount = getAppDatesByStatus(rejectedApps);
+
+  const appDates = dashboardData.job_application_data.map((app) => app.applied);
+  const xLabels = dashboardData.job_application_data.map((app) =>
+    app.applied.slice(5)
+  );
+  const aData = appDates.map((app) => rejectedAppsCount[app] || 0);
+  const bData = appDates.map((app) => pendingAppsCount[app] || 0);
+  const cData = appDates.map((app) => respondedAppsCount[app] || 0);
+
+  //Array to store the dates of each app
 
   return (
     <>
@@ -82,6 +118,15 @@ export default function Home() {
               >
                 <PieDataChart data={chart1Data} />
                 <PieDataChart data={chart2Data} />
+              </Grid>
+
+              <Grid item xs={12} style={{ marginTop: "2rem" }}>
+                <LineDataChart
+                  aData={aData}
+                  bData={bData}
+                  cData={cData}
+                  xLabels={xLabels}
+                />
               </Grid>
 
               <Grid item xs={12} style={{ marginTop: "2rem" }}>

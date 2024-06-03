@@ -3,6 +3,7 @@ import NavBar from "@/components/NavBar";
 import DashboardCard from "@/components/DashboardCard";
 import { Container, Box, Grid, Typography } from "@mui/material";
 import ApplicationDataTable from "@/components/ApplicationDataTable";
+import DataTable from "@/components/DataTable";
 import { dashboardData } from "@/dashboard-data";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
@@ -49,6 +50,7 @@ export default function Home() {
     { id: 2, value: pendingApps.length, label: "Pending" },
   ];
 
+  //First Challenge Code
   /**
    * This function creates an array of the number of apps by the "applied" date
    * according to its status
@@ -70,19 +72,42 @@ export default function Home() {
     return appDates;
   }
 
+  //get the count of the app dates by ststus
   const pendingAppsCount = getAppDatesByStatus(pendingApps);
   const respondedAppsCount = getAppDatesByStatus(respondedApps);
   const rejectedAppsCount = getAppDatesByStatus(rejectedApps);
 
-  const appDates = dashboardData.job_application_data.map((app) => app.applied);
-  const xLabels = dashboardData.job_application_data.map((app) =>
-    app.applied.slice(5)
-  );
+  //Create data for the chart
+  const appDates = dashboardData.job_application_data.map((app) => app.applied); //Get all dates
+
   const aData = appDates.map((app) => rejectedAppsCount[app] || 0);
   const bData = appDates.map((app) => pendingAppsCount[app] || 0);
   const cData = appDates.map((app) => respondedAppsCount[app] || 0);
 
-  //Array to store the dates of each app
+  //Trim the year from x-axis labels for sake of space
+  const xLabels = dashboardData.job_application_data.map((app) =>
+    app.applied.slice(5)
+  );
+
+  //Second Challenge Code
+
+  const columns = [
+    { field: "id", headerName: "ID", width: 50 },
+    { field: "company", headerName: "Company", width: 220 },
+    { field: "position", headerName: "Position", width: 220 },
+    { field: "applied", headerName: "Applied", width: 150 },
+    { field: "response", headerName: "Response", width: 150 },
+    { field: "interview", headerName: "Interview" },
+  ];
+
+  const rows = dashboardData.job_application_data.map((row) => ({
+    id: row.id,
+    company: row.company,
+    position: row.position,
+    applied: row.applied,
+    response: row.response,
+    interview: row.interview,
+  }));
 
   return (
     <>
@@ -119,6 +144,11 @@ export default function Home() {
                 <PieDataChart data={chart1Data} />
                 <PieDataChart data={chart2Data} />
               </Grid>
+              <Grid item xs={12} style={{ marginTop: "2rem" }}>
+                <ApplicationDataTable
+                  data={dashboardData.job_application_data}
+                />
+              </Grid>
 
               <Grid item xs={12} style={{ marginTop: "2rem" }}>
                 <LineDataChart
@@ -130,9 +160,7 @@ export default function Home() {
               </Grid>
 
               <Grid item xs={12} style={{ marginTop: "2rem" }}>
-                <ApplicationDataTable
-                  data={dashboardData.job_application_data}
-                />
+                <DataTable rows={rows} columns={columns} />
               </Grid>
             </Container>
           </Grid>
